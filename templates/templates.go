@@ -8,8 +8,12 @@ import (
 var sources map[string]string
 var T *template.Template
 
+func MyEq(a, b interface{}) bool {
+	return a == b
+}
+
 func init() {
-	T = template.New("_top_")
+	T = template.New("_top_").Funcs(template.FuncMap{"myeq": MyEq})
 }
 
 func registerTemplate(name string, source string) {

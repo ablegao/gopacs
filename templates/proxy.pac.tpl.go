@@ -9,7 +9,7 @@ function FindProxyForURL(url, host) {
     var RUNNING_PROXY = "{{with .Proxy }}{{range .}}{{.Category}} {{.Address}};{{end}}{{end}};";
 
     {{with .Role}}{{range .}}
-    if({{.Name|html}}.test(url)){ return {{if eq .Category  "0" }}RUNNING_PROXY{{else}}DEFAULT_PROXY{{end}} }
+    if({{.Name|html}}.test(url)){ return {{if myeq .Category  "0" }}RUNNING_PROXY{{else}}DEFAULT_PROXY{{end}} }
     {{end}}{{end}}
 
 

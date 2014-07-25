@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"gopacs/templates"
 	"log"
 	"net/http"
@@ -12,6 +13,8 @@ var (
 	gfwlist_path      = "./gfwlist.role"
 )
 
+var address = flag.String("address", ":8888", "0.0.0.0:8888")
+
 func init() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 	http.HandleFunc("/", home)
@@ -20,14 +23,17 @@ func init() {
 
 func main() {
 	templates.Parse()
+	flag.Parse()
 
 	//http.HandleFunc("/admin/", adminHandler)
 	//http.HandleFunc("/login/", loginHandler)
 	//http.HandleFunc("/ajax/", ajaxHandler)
 	//http.HandleFunc("/", NotFoundHandler)
 
-	http.ListenAndServe(":8888", nil)
-
+	err := http.ListenAndServe(*address, nil)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func home(w http.ResponseWriter, r *http.Request) {

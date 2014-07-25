@@ -1,0 +1,38 @@
+<ons-page ng-controller="ParamEditCtrl">
+    <ons-toolbar>
+        <div class="left">
+            <ons-back-button>Back</ons-back-button>
+        </div>
+        <div class="center">修改</div>
+    </ons-toolbar>
+
+    <section style="padding: 8px">
+        <input type="text" class="text-input" ng-model="mode.name" placeholder="名称" style="display: block; width: 100%">
+    </section>
+
+    <section style="padding: 8px">
+        <ons-row>
+            <ons-col>
+                <label class="radio-button">
+                    <input type="radio" id="category" ng-model="mode.category" name="category" value="0">
+                    <div class="radio-button__checkmark"></div>{{modes.catename[0]}}
+                </label>
+            </ons-col>
+            <ons-col>
+                <label class="radio-button">
+                    <input type="radio" id="category" ng-model="mode.category" name="category" value="1">
+                    <div class="radio-button__checkmark"></div>{{modes.catename[1]}}
+                </label>
+            </ons-col>
+            
+        </ons-row>
+    </section>
+
+    <section style="padding: 8px">
+        <ons-button  ng-click="modes.save();paramNavigator.popPage();" modifier="large">  确认</ons-button>
+    </section>
+    <section style="padding: 8px">
+        <button  ng-click="modes.delete(index);paramNavigator.popPage();" class="button--large--cta"  > <ons-icon  icon="fa fa-lg fa-trash-o"  class="minusIcon"></ons-icon> 删除</button>
+    </section>
+
+</ons-page>

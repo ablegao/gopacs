@@ -1,0 +1,22 @@
+<ons-page style="background-color: white; border-right: 1px solid #ddd;">
+
+
+        <ons-list>
+            <ons-list-item modifier="tappable" class="list__item__line-height" onclick="app.splitView.toggle(); app.splitView.setMainPage('static/html/page1.html');">
+                <i class="fa fa-home fa-lg" style="color: #666"></i>
+                &nbsp; 服务状态
+            </ons-list-item>
+
+            <ons-list-item modifier="tappable" class="list__item__line-height" onclick="app.splitView.toggle();app.splitView.setMainPage('static/html/page2.html');">
+                <i class="fa fa-gear fa-lg" style="color: #666"></i>
+                &nbsp; 规则列表
+            </ons-list-item>
+
+            <ons-list-item modifier="tappable" class="list__item__line-height" onclick="app.splitView.toggle();app.splitView.setMainPage('static/html/proxy.html');">
+                <i class="fa fa-gear fa-lg" style="color: #666"></i>
+                &nbsp; 代理设置
+            </ons-list-item>
+
+        </ons-list>
+
+</ons-page>

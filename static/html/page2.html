@@ -1,0 +1,35 @@
+<ons-navigator var="paramNavigator" title="navigator">
+    <ons-page ng-controller="ParamsCtrl">
+        <ons-toolbar>
+            <div class="center">规则列表</div>
+        </ons-toolbar>
+
+        <ons-list>
+            <ons-list-header>
+                <ons-row>
+                    <ons-col>规则</ons-col>
+                    <ons-col>应用方式</ons-col>
+                    <ons-col size=10>删除</ons-col>
+                </ons-row>
+            </ons-list-header>
+            <ons-scroller>
+
+                <ons-list-item style="text-align:center;" ng-click="mode.add()">
+                  <ons-icon  icon="fa fa-lg fa-plus" class="minusIcon "></ons-icon>添加
+                </ons-list-item>
+
+                <ons-list-item ng-repeat="item in mode.items" ng-click="gotoEdit($index);">
+                    <ons-row>
+                        <ons-col>{{item.name}}</ons-col>
+                        <ons-col>{{mode.catename[item.category]}}</ons-col>
+                        <ons-col size=10>
+                            <ons-icon icon="fa fa-lg fa-chevron-right" class="minusIcon"></ons-icon>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+
+            </ons-scroller>
+
+        </ons-list>
+    </ons-page>
+</ons-navigator>

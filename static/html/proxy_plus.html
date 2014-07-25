@@ -1,0 +1,48 @@
+<ons-page ng-controller="ProxyEditCtrl">
+
+    <ons-toolbar>
+        <div class="left">
+            <ons-back-button>Back</ons-back-button>
+        </div>
+        <div class="center">修改</div>
+    </ons-toolbar>
+
+    <section style="padding: 8px">
+        <input type="text" class="text-input" ng-model="proxy.name" placeholder="名称" style="display: block; width: 100%">
+    </section>
+
+    <section style="padding: 8px">
+        <input type="text" class="text-input" ng-model="proxy.address" placeholder="地址:x.x.x.x:xxx" style="display: block; width: 100%">
+    </section>
+
+    <section style="padding: 8px">
+        <ons-row>
+            <ons-col>
+                <label class="radio-button">
+                    <input type="radio" id="category" ng-model="proxy.category" name="category" value="PROXY">
+                    <div class="radio-button__checkmark"></div>PROXY
+                </label>
+            </ons-col>
+            <ons-col>
+                <label class="radio-button">
+                    <input type="radio" id="category" ng-model="proxy.category" name="category" value="SOCKET">
+                    <div class="radio-button__checkmark"></div>SOCKET
+                </label>
+            </ons-col>
+            <ons-col>
+                <label class="radio-button">
+                    <input type="radio" id="category" ng-model="proxy.category" name="category" value="SOCKET5">
+                    <div class="radio-button__checkmark"></div>SOCKET5
+                </label>
+            </ons-col>
+        </ons-row>
+    </section>
+<br>
+
+	<section style="padding: 8px">
+        <ons-button  ng-click="proxys.save();myNavigator.popPage();" modifier="large">  确认</ons-button>
+    </section>
+    <section style="padding: 8px">
+        <button  ng-click="proxys.delete(index);myNavigator.popPage();" class="button--large--cta"  > <ons-icon  icon="fa fa-lg fa-trash-o"  class="minusIcon"></ons-icon> 删除</button>
+    </section>
+</ons-page>

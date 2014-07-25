@@ -1,0 +1,47 @@
+<ons-navigator var="myNavigator" title="Navigator">
+    <ons-page ng-controller="ProxyListCtrl">
+        <ons-toolbar>
+            <div class="center">代理设置</div>
+        </ons-toolbar>
+
+        <ons-list>
+            <ons-list-header>
+
+                <ons-row>
+                    <ons-col size=20>名称</ons-col>
+                    <ons-col>地址</ons-col>
+                    <ons-col>类型</ons-col>
+
+                    <ons-col size=10>操作</ons-col>
+                </ons-row>
+
+
+            </ons-list-header>
+            <ons-scroller>
+
+                <ons-list-item style="text-align:center;" ng-click="proxy.add()">
+                  <ons-icon  icon="fa fa-lg fa-plus" class="minusIcon "></ons-icon>添加
+                </ons-list-item>
+                <ons-list-item ng-repeat="item in proxy.items" ng-click="gotoEdit($index);" >
+                    <ons-row>
+                        <ons-col size="20">{{item.name}}</ons-col>
+                        <ons-col >{{item.address}}</ons-col>
+                        <ons-col >{{item.category}}</ons-col>
+
+                        <ons-col size=10>
+                            <ons-icon  icon="fa fa-lg fa-chevron-right" class="minusIcon"></ons-icon>
+
+                        </ons-col>
+                    </ons-row>
+
+
+                </ons-list-item>
+
+
+            </ons-scroller>
+
+            <!-- ons-list-header>Tappable Numbers</ons-list-header -->
+        </ons-list>
+
+    </ons-page>
+</ons-navigator>

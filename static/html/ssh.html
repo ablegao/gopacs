@@ -1,0 +1,52 @@
+<ons-navigator var="myNavigator" title="Navigator">
+    <ons-page ng-controller="SSHListCtrl">
+        <ons-toolbar>
+            <div class="center">SSH设置</div>
+        </ons-toolbar>
+
+        <ons-list>
+            <ons-list-header>
+
+                <ons-row>
+                    <ons-col size=20>名称</ons-col>
+                    <ons-col>地址</ons-col>
+                    <ons-col>本地端口</ons-col>
+                    <ons-col>服务状态</ons-col>
+                    <ons-col size=10>操作</ons-col>
+                </ons-row>
+
+
+            </ons-list-header>
+
+              
+                <ons-list-item ng-repeat="item in mode.items" >
+                    <ons-row>
+                        <ons-col size="20">{{item.name}}</ons-col>
+                        <ons-col >{{item.address}}:{{item.server_port}}</ons-col>
+                        <ons-col >:{{item.local_port}}</ons-col>
+                        <ons-col>
+                        <label ng-switch on="item.state" >
+                            {{mode.stateName[item.state]}}
+                            <button ng-switch-when="0" ng-click="serverStart($index)" class="large">连接</button>
+                            <button ng-switch-when="1" class="large">连接中</button>
+                            <button ng-switch-when="2" class="large">停止</button>
+
+                        </label>
+                        </ons-col>
+                        <ons-col size=10  ng-click="gotoEdit($index);" >
+                            <ons-icon  icon="fa fa-lg fa-chevron-right" class="minusIcon"></ons-icon>
+                        </ons-col>
+                    </ons-row>
+
+
+                </ons-list-item>
+
+  <ons-list-item style="text-align:center;" ng-click="mode.add()">
+                  <ons-icon  icon="fa fa-lg fa-plus" class="minusIcon "></ons-icon>添加
+                </ons-list-item>
+
+            <!-- ons-list-header>Tappable Numbers</ons-list-header -->
+        </ons-list>
+
+    </ons-page>
+</ons-navigator>

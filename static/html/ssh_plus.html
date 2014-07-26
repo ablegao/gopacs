@@ -1,0 +1,35 @@
+<ons-page ng-controller="SSHCtrl">
+    <ons-toolbar>
+        <div class="left">
+            <ons-back-button>Back</ons-back-button>
+        </div>
+        <div class="center">修改</div>
+    </ons-toolbar>
+
+    <section style="padding: 8px">
+        <input type="text" class="text-input" ng-model="mode.name" placeholder="名称" style="display: block; width: 100%">
+    </section>
+
+    <section style="padding: 8px">
+        <input type="text" class="text-input" ng-model="mode.address" placeholder="服务地址" style="display: block; width: 100%">
+    </section>
+    <section style="padding: 8px">
+        <input type="text" class="text-input" ng-model="mode.server_port" placeholder="服务器端口" style="display: block; width: 100%">
+    </section>
+    <section style="padding: 8px">
+        <input type="password" class="text-input" ng-model="mode.passwd" placeholder="密码" style="display: block; width: 100%">
+    </section>
+
+    <section style="padding: 8px">
+        <input type="text" class="text-input" ng-model="mode.local_port" placeholder="本地端口" style="display: block; width: 100%">
+    </section>
+
+
+    <section style="padding: 8px">
+        <ons-button  ng-click="modes.save();myNavigator.popPage();" modifier="large">  确认</ons-button>
+    </section>
+    <section style="padding: 8px">
+        <button  ng-click="modes.delete(index);myNavigator.popPage();" class="button--large--cta"  > <ons-icon  icon="fa fa-lg fa-trash-o"  class="minusIcon"></ons-icon> 删除</button>
+    </section>
+
+</ons-page>

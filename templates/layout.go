@@ -5,6 +5,9 @@ func tplLayout(tpl string) string {
 <!doctype html>
 <html lang="zh-cn" ng-app="goProxy">
 <head>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Expires" CONTENT="0"> 
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">​
 <title>GoPacProxy</title>
 <link rel="stylesheet" href="/static/lib/onsen/css/onsenui.css">  

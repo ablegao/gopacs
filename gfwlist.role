@@ -1,3 +1,7 @@
+/twitter\.com/i
+/google\.com/i
+/google\.com\.hk/i
+/googlecode\.com\.hk/i
 /^[\w\-]+:\/+(?!\/)(?:[^\/]+\.)?darpa\.mil/i
 /^[\w\-]+:\/+(?!\/)(?:[^\/]+\.)?fxnetworks\.com/i
 /hulu\.com/i
@@ -715,7 +719,7 @@
 /\.ezpeer\.com/i
 /\.facebook\.com/i
 /^[\w\-]+:\/+(?!\/)(?:[^\/]+\.)?facebook\.com/i
-/\/^https?\:\\/\\/[^\\/]+facebook\\.com\//i
+/\/^https?\:\/\/[^\\/]+facebook\.com/i
 /^[\w\-]+:\/+(?!\/)(?:[^\/]+\.)?connect\.facebook\.net/i
 /^[\w\-]+:\/+(?!\/)(?:[^\/]+\.)?facesofnyfw\.com/i
 /^[\w\-]+:\/+(?!\/)(?:[^\/]+\.)?faiththedog\.info/i
@@ -974,7 +978,7 @@
 /^[\w\-]+:\/+(?!\/)(?:[^\/]+\.)?apis\.google\.com/i
 /\.appspot\.com/i
 /^[\w\-]+:\/+(?!\/)(?:[^\/]+\.)?appspot\.com/i
-/\/^https?\:\\/\\/[^\\/]+appspot\\.com\//i
+/\/^https?\:\/\/[^\/]+appspot\.com/i
 /code\.google\.com\/p\/gappproxy/i
 /code\.google\.com\/p\/gaeproxy/i
 /code\.google\.com\/p\/west-chamber-season-3/i
@@ -2798,7 +2802,7 @@
 /^[\w\-]+:\/+(?!\/)(?:[^\/]+\.)?twitter\.com/i
 /^[\w\-]+:\/+(?!\/)(?:[^\/]+\.)?twitter\.jp/i
 /^[\w\-]+:\/+(?!\/)(?:[^\/]+\.)?twttr\.com/i
-/\/^https?\:\\/\\/[^\\/]+twitter\\.com\//i
+/^https?\:\/\/[^\/]+twitter\.com/i
 /^[\w\-]+:\/+(?!\/)(?:[^\/]+\.)?twitter4j\.org/i
 /\.twittercounter\.com/i
 /^[\w\-]+:\/+(?!\/)(?:[^\/]+\.)?twittercounter\.com/i

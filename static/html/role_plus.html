@@ -7,21 +7,21 @@
     </ons-toolbar>
 
     <section style="padding: 8px">
-        <input type="text" class="text-input" ng-model="mode.name" placeholder="名称" style="display: block; width: 100%">
+        <input type="text" class="text-input" ng-model="mode.name" placeholder="代理规则名称:/www\.baidu\.com/i" style="display: block; width: 100%">
     </section>
 
     <section style="padding: 8px">
         <ons-row>
             <ons-col>
                 <label class="radio-button">
-                    <input type="radio" id="category" ng-model="mode.category" name="category" value="0">
-                    <div class="radio-button__checkmark"></div>{{modes.catename[0]}}
+                    <input type="radio" id="category" ng-model="mode.category" name="category" value="a">
+                    <div class="radio-button__checkmark"></div>{{modes.catename["a"]}}
                 </label>
             </ons-col>
             <ons-col>
                 <label class="radio-button">
-                    <input type="radio" id="category" ng-model="mode.category" name="category" value="1">
-                    <div class="radio-button__checkmark"></div>{{modes.catename[1]}}
+                    <input type="radio" id="category" ng-model="mode.category" name="category" value="b">
+                    <div class="radio-button__checkmark"></div>{{modes.catename["b"]}}
                 </label>
             </ons-col>
             

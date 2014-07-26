@@ -2,123 +2,100 @@
     'use strict';
     var module = angular.module('goProxy', ['onsen']);
 
-    module.controller('ProxyListCtrl', ["$scope", 'ProxyList',
-        function($scope, ProxyList) {
+    module.controller('ProxyListCtrl', ["$scope", 'DbApi',"Params",
+        function($scope, DbApi,Params) {
             console.log("ProxyListCtrl");
 
-            $scope.proxy = ProxyList;
-            
-            $scope.proxy.loadData(function(){
-              $scope.$watch('proxy', function(to, form) {
-                console.log("proxy .. watch")
-                $scope.proxy.save();
-              });
+            $scope.proxy = new DbApi("/proxy_ctrl" , {
+                        name: "",
+                        category: "SOCKS5",
+                        address: "0.0.0.0:8080"
+                    });
+            $scope.proxy.loadData();
+
+            ons.ready(function() {
+                myNavigator.on("prepop",function(){ $scope.proxy.loadData(); });
             });
-            //console.log("=====");
 
-            //$scope.proxy.load();
 
-            $scope.gotoEdit = function(id){
+            $scope.gotoEdit = function(id) {
                 console.log(id);
-                $scope.proxy.cate=1;
-                $scope.proxy.index = id;
-                myNavigator.pushPage('/static/html/proxy_plus.html', {animation: 'slide'});
+                
+                Params.ProxyListIndex= id;
+                myNavigator.pushPage('/static/html/proxy_plus.html', {
+                    animation: 'slide'
+                });
             }
             //console.log($scope.proxy.index);
         }
     ]);
 
-    module.controller('ProxyEditCtrl', ['$scope' , 'ProxyList', function($scope,ProxyList){
-        $scope.proxys= ProxyList;
-        $scope.proxy = ProxyList.items[ProxyList.index];
-        $scope.index = ProxyList.index ;
-
-        $scope.$watch('proxy', function(to, form) {
-                console.log("proxy .. watch.save")
-                $scope.proxys.save();
-        });
-    }]);
-
-
-    module.factory('ProxyList', ["$http",
-        function($http) {
-            var proxys = {
-                loadData: function(callback) {
-                    var p = $http({
-                        method: "GET",
-                        url: "/proxy_ctrl"
+    module.controller('ProxyEditCtrl', ['$scope', 'DbApi',"Params",
+        function($scope, DbApi , Params) {
+            $scope.proxys =  new DbApi("/proxy_ctrl" , {
+                        name: "",
+                        category: "SOCKS5",
+                        address: "0.0.0.0:8080"
                     });
 
-                    p.success(function(response, status, headers, config) {
-                        if (response.length > 0) {
-                            proxys.items = response;
-                        }
-                        if (callback){callback();}
-                    });
+            $scope.proxys.loadData(function(){
 
+                $scope.proxy = $scope.proxys.items[Params.ProxyListIndex];
+                $scope.index =Params.ProxyListIndex;
 
-                },
-                add:function(){
-                  this.items.unshift({name:"点击填写名称",category:"SOCKET5",address:"0.0.0.0:8080",state:0})
-                },
-                delete: function(index) {
-                    this.items.splice(index, 1);
-                    this.save();
-                },
-                save: function(callback) {
-                    var p = $http({
-                        method: "POST",
-                        data: proxys.items,
-                        url: "/proxy_ctrl"
-                    });
-
-                    p.success(function(response, status, headers, config) {
-                        if (response.length > 0) {
-                            p.items = response;
-                        }
-                        if (callback){callback();}
-                    });
-
-                },
-                items: [ ],
-                cate:1, //#编辑 , 2添加
-                index:0 
-            }
-
-            return proxys;
+                $scope.$watch('proxy', function(to, form) {
+                    console.log("proxy .. watch.save")
+                    $scope.proxys.save();
+                }); 
+            });
+            
         }
     ]);
+    module.controller('ParamEditCtrl', ['$scope', 'DbApi',"Params",
+        function($scope, DbApi,Params) {
 
-    module.controller('ParamEditCtrl', ['$scope' , 'ParamsList', function($scope,Params){
-        $scope.modes= Params;
-        $scope.mode = Params.items[Params.index];
-        $scope.index = Params.index ;
+            console.log(Params.paramsEditIndex);
+            $scope.modes = new DbApi("/params_ctrl", {
+                name: "",
+                categray: "a",
+            });
+            $scope.modes.catename = {"a":"连接可用代理", "b":"跳过代理"};
 
-        $scope.$watch('mode', function(to, form) {
-            $scope.modes.save();
-        });
-    }]);
-
-
-
-    module.controller('ParamsCtrl', ["$scope", 'ParamsList',
-        function($scope, List) {
-            console.log("ParamsCtrl");
-
-            $scope.mode = List;
-            //console.log("=====");
-
-            $scope.mode.loadData(function(){
-              $scope.$watch('mode', function(to, form) {
-                $scope.mode.save();
-              });
+            $scope.modes.loadData(function() {
+                $scope.mode = $scope.modes.items[Params.paramsEditIndex];
+                $scope.index = Params.paramsEditIndex;
+                $scope.$watch('mode', function(to, form) {
+                    $scope.modes.save();
+                });
             });
 
-            $scope.gotoEdit = function(id){
 
-                $scope.mode.cate=1;
-                $scope.mode.index = id;
-                paramNavigator.pushPage('/static/html/role_plus.html', {animation: 'slide'});
+
+        }
+    ]);
+
+
+
+    module.controller('ParamsCtrl', ["$scope", 'DbApi',"Params",
+        function($scope, DbApi,Params) {
+            $scope.mode = new DbApi("/params_ctrl", {
+                name: "",
+                category: "a",
+            });
+
+            ons.ready(function() {
+                paramNavigator.on("prepop",function(){ $scope.mode.loadData(); });
+            });
+            
+            //console.log("=====");
+            $scope.mode.catename = {"a":"连接可用代理", "b":"跳过代理"};
+            $scope.mode.loadData();
+
+            $scope.gotoEdit = function(id) {
+                Params.paramsEditIndex = id;
+                paramNavigator.pushPage('/static/html/role_plus.html', {
+                    animation: 'slide'
+                });
 
             }
 
@@ -126,26 +103,120 @@
     ]);
 
 
-    module.factory('ParamsList', ["$http",
+
+
+    module.controller('SSHCtrl', ['$scope', 'DbApi',"Params",
+        function($scope, DbApi,Params) {
+
+            $scope.modes = newSSHModel(DbApi);
+
+            $scope.modes.loadData(function() {
+                $scope.mode = $scope.modes.items[Params.sshEditIndex];
+                $scope.index = Params.sshEditIndex;
+                $scope.$watch('mode', function(to, form) {
+                    $scope.modes.save();
+                });
+            });
+        }
+    ]);
+
+
+
+    module.controller('SSHListCtrl', ["$scope","$http", 'DbApi',"Params",
+        function($scope,$http, DbApi,Params) {
+            $scope.mode = newSSHModel(DbApi);
+
+            ons.ready(function() {
+                myNavigator.on("prepop",function(){ $scope.mode.loadData(); });
+            });
+            
+            //console.log("=====");
+            $scope.mode.stateName = Params.ssh_state
+            $scope.mode.loadData();
+
+            $scope.gotoEdit = function(id) {
+                Params.sshEditIndex = id;
+                myNavigator.pushPage('/static/html/ssh_plus.html', {
+                    animation: 'slide'
+                });
+            }
+
+            $scope.serverStart = function(id){
+                var p  = $http({
+                    method:"POST",
+                    url:"/ssh_start" , 
+                    data:$scope.mode.items[id]
+                });
+                p.success=function(response, status, headers, config){
+                    console.log(response , status)
+                }
+            }
+        }
+    ]);
+
+    function newSSHModel(DbApi){
+        return new DbApi("/ssh_ctrl", {
+                name: "ssh名称",
+                address: "root@www.com",
+                server_port:"22",
+                local_port:"8080",
+                passwd:"",
+                state: 0
+            });
+    }
+
+
+    module.factory('Params', [ function(){
+        var params ={
+            ssh_state:["关闭" , "连接中" , "正常","无法启动"]
+        }
+
+        return params
+    }])
+
+    module.factory('DbApi', ["$http",
         function($http) {
-            var proxys = {
+
+            var mode = function(url, fields) {
+                this.url = url;
+                this.fields = fields;
+                //this.items={};
+            }
+
+            mode.prototype = {
+                index: 0,
+                items: new Array(),
                 loadData: function(callback) {
                     var p = $http({
                         method: "GET",
-                        url: "/params_ctrl"
+                        url: this.url
                     });
+                    var self = this;
+
                     p.success(function(response, status, headers, config) {
                         if (response.length > 0) {
-                            proxys.items = response;
+                            self.items = response;
+                        }else{
+                            self.items= new Array();
                         }
-                        if (callback){callback();}
+                        if (callback) {
+                            callback();
+                        }
                     });
+                },
+                get: function(id) {
+                    return this.items[id];
+                },
+                add: function() {
+                    //this.items.push(this.fields);
+                    //this.items[]= this.fields;
+                    this.items.push(angular.copy(this.fields));
+                    console.log(this.items);
+                    this.save();
 
                 },
-                add:function(){
-                  this.items.unshift({name:"点击填写名称",categray:0,state:0})
-                },
                 delete: function(index) {
+                    console.log("delete " + index)
                     this.items.splice(index, 1);
                     this.save();
 
@@ -153,27 +224,25 @@
                 save: function(callback) {
                     var p = $http({
                         method: "POST",
-                        data: proxys.items,
-                        url: "/params_ctrl"
+                        data: this.items,
+                        url: this.url
                     });
-
+                    var self = this;
                     p.success(function(response, status, headers, config) {
                         if (response.length > 0) {
-                            p.items = response;
+                            self.items = response;
                         }
-                        if (callback){callback();}
+                        if (callback) {
+                            callback();
+                        }
                     });
+                }
 
-                },
-                items: [],
-                catename:["连接可用代理" , "跳过代理"],
-                cate:1, //#编辑 , 2添加
-                index:0 
             }
-
-            return proxys;
+            return mode;
         }
     ]);
+
 
 
 })();

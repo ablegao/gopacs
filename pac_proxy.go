@@ -16,7 +16,7 @@ var coder = base64.StdEncoding
 
 func init() {
 	http.HandleFunc("/proxy.pac", proxyPac)
-
+	log.SetFlags(log.Lshortfile)
 }
 func getGFWRole() []string {
 	str, _ := readAllFileToByte(gfwlist_path)
@@ -69,13 +69,11 @@ type ProxyInfo struct {
 	Name     string `json:"name"`
 	Category string `json:"category"`
 	Address  string `json:"address"`
-	State    int    `json:"state"`
 }
 
 type RoleList struct {
 	Name     string `json:"name"`
 	Category string `json:"category"`
-	State    string `json:"state"`
 }
 
 func proxyPac(w http.ResponseWriter, r *http.Request) {
@@ -89,7 +87,7 @@ func proxyPac(w http.ResponseWriter, r *http.Request) {
 	b, err = readAllFileToByte(proxy_server_path)
 	if err != nil {
 		http.Error(w, err.Error(), 502)
-		log.Println(err.Error())
+		log.Println("json...... ", err.Error())
 		return
 	}
 	var v = []ProxyInfo{}
@@ -102,7 +100,7 @@ func proxyPac(w http.ResponseWriter, r *http.Request) {
 	b, err = readAllFileToByte(role_list_path)
 	if err != nil {
 		http.Error(w, err.Error(), 502)
-		log.Println(err.Error())
+		log.Println("role_list_path ", err.Error())
 		return
 	}
 	var role = []RoleList{}

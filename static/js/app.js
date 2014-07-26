@@ -106,8 +106,8 @@
 
 
     module.controller('SSHCtrl', ['$scope', 'DbApi',"Params",
-        function($scope, DbApi,Params) {
-
+        function($scope, DbApi,Params ) {
+           
             $scope.modes = newSSHModel(DbApi);
 
             $scope.modes.loadData(function() {
@@ -122,9 +122,16 @@
 
 
 
-    module.controller('SSHListCtrl', ["$scope","$http", 'DbApi',"Params",
-        function($scope,$http, DbApi,Params) {
+    module.controller('SSHListCtrl', ["$scope","$http", 'DbApi',"Params","UpdateStatus",
+        function($scope,$http, DbApi,Params, UpdateStatus) {
             $scope.mode = newSSHModel(DbApi);
+
+             $scope.state = new UpdateStatus();
+
+            setInterval(function(){
+                $scope.state.update();
+                console.log($scope.state)
+            },5000);
 
             ons.ready(function() {
                 myNavigator.on("prepop",function(){ $scope.mode.loadData(); });
@@ -140,7 +147,15 @@
                     animation: 'slide'
                 });
             }
-
+            $scope.serverStop= function(id){
+                $http({
+                    method:"POST",
+                    url:"/ssh_stop" , 
+                    data:$scope.mode.items[id].name
+                }).success=function(response, status, headers, config){
+                    console.log(response , status)
+                }
+            }
             $scope.serverStart = function(id){
                 var p  = $http({
                     method:"POST",
@@ -173,6 +188,22 @@
 
         return params
     }])
+    module.factory('UpdateStatus', ['$http', function($http){
+        var mode = function(){
+            this.state = new Array();
+        }
+        mode.prototype.update=function(){
+            var self = this;
+            $http({
+                method:"GET",
+                url:"/ssh_state",
+            }).success(function(response, status, headers, config){
+                self.state = response;
+            });
+
+        }
+        return mode
+    }]);
 
     module.factory('DbApi', ["$http",
         function($http) {

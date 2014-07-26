@@ -5,6 +5,8 @@ import (
 	"gopacs/templates"
 	"log"
 	"net/http"
+	"os/exec"
+	"strings"
 )
 
 var (
@@ -32,14 +34,17 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 }
 
+var serverName string
+
 func main() {
 	templates.Parse()
 	flag.Parse()
+	info, _ := exec.Command("uname", "-a").Output()
+	str := strings.Split(string(info), " ")
+	serverName = str[1]
 
-	//http.HandleFunc("/admin/", adminHandler)
-	//http.HandleFunc("/login/", loginHandler)
-	//http.HandleFunc("/ajax/", ajaxHandler)
-	//http.HandleFunc("/", NotFoundHandler)
+	log.Printf("SERVER: http://%s%s\n", serverName, *address)
+	log.Printf("PAC: http://%s%s/proxy.pac\n", serverName, *address)
 
 	err := http.ListenAndServe(*address, nil)
 	if err != nil {

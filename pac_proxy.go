@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 var coder = base64.StdEncoding
@@ -111,11 +112,26 @@ func proxyPac(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
+	ssh := []string{}
+
+	getList := GetListPorts{make(chan []string)}
+	go func() {
+		select {
+		case ssh_get_all_ports <- getList:
+		default:
+		}
+	}()
+	select {
+	case ssh = <-getList.Info:
+	case <-time.After(10 * time.Millisecond):
+	}
 	p := struct {
-		Proxy []ProxyInfo
-		Role  []RoleList
-		GFW   []string
-	}{v, role, gfw}
+		Proxy  []ProxyInfo
+		Role   []RoleList
+		GFW    []string
+		Server string
+		Ssh    []string
+	}{v, role, gfw, serverName, ssh}
 
 	w.Header().Set("Server", "GoPacProxy 1.0")
 	w.Header().Set("Content-Type", "application/x-ns-proxy-autoconfig")

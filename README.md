@@ -1,7 +1,13 @@
 gopacs
 ======
 
-这一个pac 代理文件服务。 使用golang 语言编写服务部分。 angularjs + onsenui 实现的管理界面部分。 
+这一个pac 代理文件服务。
+
+
+
+使用golang 语言编写服务部分。 
+
+angularjs + onsenui 实现的管理界面部分。 
 
 引用了autoproxy 的gfwlist 列表。 
 

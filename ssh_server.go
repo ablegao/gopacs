@@ -11,16 +11,28 @@ import (
 )
 
 var (
-	ssh_start_chan  = make(chan *SshParams)
-	ssh_stop_chan   = make(chan string)
-	ssh_run_server  = map[string]*SshParams{}
-	ssh_stop_server = make(chan bool)
+	ssh_start_chan    = make(chan *SshParams)
+	ssh_stop_chan     = make(chan string)
+	ssh_run_server    = map[string]*SshParams{}
+	ssh_stop_server   = make(chan bool)
+	ssh_get_status    = make(chan GetListStatus)
+	ssh_get_all_ports = make(chan GetListPorts)
 )
 
 func init() {
 	http.HandleFunc("/ssh_start", ssh_start)
 	http.HandleFunc("/ssh_stop", ssh_stop)
+	http.HandleFunc("/ssh_state", ssh_status)
+
 	go ssh_controller()
+}
+
+type GetListStatus struct {
+	Info chan map[string]int
+}
+
+type GetListPorts struct {
+	Info chan []string
 }
 
 type SshParams struct {
@@ -44,9 +56,11 @@ func (s *SshParams) Start() {
 		if s.State != 4 && s.restartNum < 2 {
 			go s.Start()
 			s.restartNum = s.restartNum + 1
+			log.Println("Start error , try agent. ", s.restartNum)
+			return
 		}
 		s.State = 0
-
+		log.Println("Server can't run!")
 	}()
 
 	//strcmd = "/usr/bin/ssh"
@@ -68,9 +82,14 @@ func (s *SshParams) Start() {
 	if err := cmd.Start(); err == nil {
 
 		go func() {
+			s.State = 2
 			err := cmd.Wait()
 			log.Println(err)
-			s.stop <- true
+			select {
+			case s.stop <- true:
+			default:
+				log.Println("ssh is stop .bug not send s.stop <- true")
+			}
 		}()
 
 		for {
@@ -79,10 +98,8 @@ func (s *SshParams) Start() {
 
 				return
 			case <-s.kill: //终止服务
-				if cmd.ProcessState.Success() {
-					cmd.Process.Kill()
-				}
 				s.State = 4
+				cmd.Process.Kill()
 				return
 			case id := <-s.changeState:
 				s.State = id
@@ -111,7 +128,7 @@ func ssh_controller() {
 			}
 		case item, ok := <-ssh_start_chan:
 			if !ok {
-				log.Println("服务开启调通道被关闭")
+				log.Println("Channel is close ")
 				return
 			}
 			var obj *SshParams
@@ -131,19 +148,36 @@ func ssh_controller() {
 				obj.changeState <- 2
 
 			}
-
 		case name, ok := <-ssh_stop_chan:
 			if !ok {
-				log.Println("服务终止通道被关闭")
+				log.Println("Channel is close ")
 				return
 			}
 			_, ok = ssh_run_server[name]
 			if !ok {
-				log.Println("服务没有启动过")
+				log.Println("Server into not exists! ")
 				return
 			}
 			if ssh_run_server[name].State == 2 {
 				ssh_run_server[name].kill <- true
+			}
+		case status := <-ssh_get_status:
+			var m = map[string]int{}
+			for name, item := range ssh_run_server {
+				m[name] = item.State
+			}
+			select {
+			case status.Info <- m:
+			default:
+			}
+		case status := <-ssh_get_all_ports:
+			var m = []string{}
+			for _, item := range ssh_run_server {
+				m = append(m, item.LocalPort)
+			}
+			select {
+			case status.Info <- m:
+			default:
 			}
 		}
 	}
@@ -177,5 +211,36 @@ func ssh_start(w http.ResponseWriter, r *http.Request) {
 }
 
 func ssh_stop(w http.ResponseWriter, r *http.Request) {
+	b, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), 502)
+		return
+	}
+	defer r.Body.Close()
+	select {
+	case ssh_stop_chan <- string(b):
+	default:
 
+	}
+}
+
+func ssh_status(w http.ResponseWriter, r *http.Request) {
+	status := GetListStatus{make(chan map[string]int)}
+	go func() {
+		select {
+		case ssh_get_status <- status:
+		default:
+		}
+	}()
+
+	select {
+	case out := <-status.Info:
+
+		b, err := json.Marshal(out)
+		if err != nil {
+			http.Error(w, err.Error(), 502)
+		}
+		w.Write(b)
+	case <-time.After(3):
+	}
 }

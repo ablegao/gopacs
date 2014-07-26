@@ -3,7 +3,7 @@
         <ons-toolbar>
             <div class="center">SSH设置</div>
         </ons-toolbar>
-
+      <br/>
         <ons-list>
             <ons-list-header>
 
@@ -25,11 +25,14 @@
                         <ons-col >{{item.address}}:{{item.server_port}}</ons-col>
                         <ons-col >:{{item.local_port}}</ons-col>
                         <ons-col>
-                        <label ng-switch on="item.state" >
-                            {{mode.stateName[item.state]}}
+                        <label ng-switch on="state.state[item.name]" >
+                            {{mode.stateName[state.state[item.name]]}}
+
+                            <button ng-switch-when="undefined" ng-click="serverStart($index)" class="large">连接</button>
                             <button ng-switch-when="0" ng-click="serverStart($index)" class="large">连接</button>
+
                             <button ng-switch-when="1" class="large">连接中</button>
-                            <button ng-switch-when="2" class="large">停止</button>
+                            <button ng-switch-when="2" class="large" ng-click="serverStop($index)">停止</button>
 
                         </label>
                         </ons-col>

@@ -89,6 +89,7 @@ func (s *SshParams) Start() {
 			case s.stop <- true:
 			default:
 				log.Println("ssh is stop .bug not send s.stop <- true")
+				s.restartNum = 0
 			}
 		}()
 

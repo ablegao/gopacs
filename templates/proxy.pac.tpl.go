@@ -3,6 +3,7 @@ package templates
 func init() {
 
 	registerTemplate("proxy.pac.tpl", `
+{{$ServerName :=.Server}}
 function FindProxyForURL(url, host) {
     var DEFAULT_PROXY = "DIRECT";
 
@@ -13,15 +14,15 @@ function FindProxyForURL(url, host) {
         return DEFAULT_PROXY;
     }
     
-    var RUNNING_PROXY = "{{with .Proxy }}{{range .}} {{.Category}} {{.Address}};{{end}}DIRECT{{end}}";
+    var RUNNING_PROXY = "{{with .Proxy }}{{range .}} {{.Category}} {{.Address}};{{end}}{{end}}{{with .Ssh}}{{range .}} SOCKS {{$ServerName}}:{{.}};{{end}}{{end}}DIRECT";
 
     {{with .Role}}{{range .}}
-    if({{.Name|html}}.test(url)){ return {{if myeq .Category  "a" }}RUNNING_PROXY{{else}}DEFAULT_PROXY{{end}} }
+    if({{MacPacFormat .Name}}.test(url)){ return {{if myeq .Category  "a" }}RUNNING_PROXY{{else}}DEFAULT_PROXY{{end}} }
     {{end}}{{end}}
 
 
    {{with .GFW}}{{range .}}
-   if({{.|html}}.test(url)){ return  RUNNING_PROXY;  }
+   if({{MacPacFormat .}}.test(url)){ return  RUNNING_PROXY;  }
    {{end}}{{end}}
 
     return DEFAULT_PROXY;

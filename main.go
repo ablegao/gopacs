@@ -10,10 +10,10 @@ import (
 )
 
 var (
-	db_path           = "./"
-	proxy_server_path = "./proxy.json"
-	role_list_path    = "./params.json"
-	gfwlist_path      = "./gfwlist.role"
+	db_path           = "./conf/"
+	proxy_server_path = "./conf/proxy.json"
+	role_list_path    = "./conf/params.json"
+	gfwlist_path      = "./conf/autoproxy.role"
 )
 
 var address = flag.String("address", ":8888", "0.0.0.0:8888")

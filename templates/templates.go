@@ -3,6 +3,7 @@ package templates
 import (
 	"html/template"
 	"log"
+	"strings"
 )
 
 var sources map[string]string
@@ -12,8 +13,12 @@ func MyEq(a, b interface{}) bool {
 	return a == b
 }
 
+func MacPacFormat(s string) string {
+	return "/" + strings.Replace(s, ".", "\\.", -1) + "/i"
+}
+
 func init() {
-	T = template.New("_top_").Funcs(template.FuncMap{"myeq": MyEq})
+	T = template.New("_top_").Funcs(template.FuncMap{"myeq": MyEq, "MacPacFormat": MacPacFormat})
 }
 
 func registerTemplate(name string, source string) {

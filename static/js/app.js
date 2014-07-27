@@ -131,7 +131,7 @@
             setInterval(function(){
                 $scope.state.update();
                 console.log($scope.state)
-            },5000);
+            },3000);
 
             ons.ready(function() {
                 myNavigator.on("prepop",function(){ $scope.mode.loadData(); });

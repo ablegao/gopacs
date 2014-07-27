@@ -18,12 +18,11 @@
 
             </ons-list-header>
 
-              
                 <ons-list-item ng-repeat="item in mode.items" >
                     <ons-row>
                         <ons-col size="20">{{item.name}}</ons-col>
                         <ons-col >{{item.address}}:{{item.server_port}}</ons-col>
-                        <ons-col >:{{item.local_port}}</ons-col>
+                        <ons-col >{{item.local_port}}</ons-col>
                         <ons-col>
                         <label ng-switch on="state.state[item.name]" >
                             {{mode.stateName[state.state[item.name]]}}

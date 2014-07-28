@@ -12,7 +12,8 @@ import (
 )
 
 func init() {
-	http.HandleFunc("/proxy.pac", proxyPac)
+	http.HandleFunc("/proxy.pac", macProxyPac)
+	http.HandleFunc("/android.pac", androidProxyPac)
 	log.SetFlags(log.Lshortfile)
 }
 func getGFWRole() []string {
@@ -32,7 +33,14 @@ type RoleList struct {
 	Category string `json:"category"`
 }
 
-func proxyPac(w http.ResponseWriter, r *http.Request) {
+func androidProxyPac(w http.ResponseWriter, r *http.Request) {
+	proxyPac(w, r, "android.pac.tpl")
+}
+
+func macProxyPac(w http.ResponseWriter, r *http.Request) {
+	proxyPac(w, r, "proxy.pac.tpl")
+}
+func proxyPac(w http.ResponseWriter, r *http.Request, tpl string) {
 	//t, err := template.ParseFiles("template/html/404.html")
 	r.ParseForm()
 	var err error
@@ -90,8 +98,10 @@ func proxyPac(w http.ResponseWriter, r *http.Request) {
 	}{v, role, gfw, serverName, ssh}
 	r.Form.Get("key")
 	w.Header().Set("Server", "GoPacProxy 1.0")
-	w.Header().Set("Content-Type", "application/x-ns-proxy-autoconfig")
-	err = templates.T.ExecuteTemplate(w, "proxy.pac.tpl", p)
+	if tpl == "proxy.pac.tpl" {
+		w.Header().Set("Content-Type", "application/x-ns-proxy-autoconfig")
+	}
+	err = templates.T.ExecuteTemplate(w, tpl, p)
 
 	if err != nil {
 		log.Println(err)

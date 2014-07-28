@@ -45,6 +45,7 @@ func main() {
 
 	log.Printf("SERVER: http://%s%s\n", serverName, *address)
 	log.Printf("PAC: http://%s%s/proxy.pac\n", serverName, *address)
+	log.Printf("PAC: http://%s%s/android.pac\n", serverName, *address)
 
 	err := http.ListenAndServe(*address, nil)
 	if err != nil {
